@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 	"github.com/relationskatie/summer-practice/internal/controller"
 	"go.uber.org/zap"
 )
@@ -30,7 +31,15 @@ func NewServer(log *zap.Logger) (*Controller, error) {
 }
 
 func (ctrl *Controller) configureRoutes() {
-	ctrl.server.GET("/hi", ctrl.HadleHi)
+	log.Info("Configuration routes")
+	api := ctrl.server.Group("/app")
+	{
+		vacancy := api.Group("/vacans")
+		{
+			vacancy.POST("/", ctrl.HandleGetVacanciesByTunning)
+			vacancy.GET("/:id", ctrl.HandleGetVacancyById)
+		}
+	}
 }
 
 func (ctrl *Controller) configureMiddlewares() {
@@ -54,9 +63,11 @@ func (ctrl *Controller) configure() error {
 }
 
 func (ctrl *Controller) Start(ctx context.Context) error {
+	ctrl.log.Info("Start server on port :8080")
 	return ctrl.server.Start(":8080")
 }
 
 func (ctrl *Controller) ShutDown(ctx context.Context) error {
+	ctrl.log.Info("Server ShutDown")
 	return ctrl.server.Shutdown(ctx)
 }

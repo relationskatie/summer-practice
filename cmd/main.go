@@ -28,7 +28,10 @@ func main() {
 		log.Fatal("Failed to initialize server", zap.Error(err))
 	}
 	defer func() {
-		log.Error("stopped server", zap.Error(server.ShutDown(ctx)))
+		log.Error(
+			"stopped server",
+			zap.Error(server.ShutDown(ctx)),
+		)
 	}()
 	err = server.Start(ctx)
 	if err != nil {
