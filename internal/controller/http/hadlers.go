@@ -17,3 +17,15 @@ func (ctrl *Controller) HandleGetVacancyById(c echo.Context) error {
 	}
 	return nil
 }
+
+func (ctrl *Controller) HandleAddToFavourite(c echo.Context) error {
+	return nil
+}
+
+func (ctrl *Controller) HandleDeleteIntoFavourite(c echo.Context) error {
+	return nil
+}
+
+func (ctrl *Controller) HandleGetAllFavourite(c echo.Context) error {
+	return nil
+}

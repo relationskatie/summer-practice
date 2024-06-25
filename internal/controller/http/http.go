@@ -38,6 +38,10 @@ func (ctrl *Controller) configureRoutes() {
 		{
 			vacancy.POST("/", ctrl.HandleGetVacanciesByTunning)
 			vacancy.GET("/:id", ctrl.HandleGetVacancyById)
+			vacancy.POST("/:id", ctrl.HandleAddToFavourite)
+			vacancy.GET("/fav/", ctrl.HandleGetAllFavourite)
+			vacancy.DELETE("/fav/:id", ctrl.HandleDeleteIntoFavourite)
+
 		}
 	}
 }
