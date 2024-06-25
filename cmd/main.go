@@ -20,7 +20,9 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to initialize logger", zap.Error(err))
 	}
+
 	log.Info("Initialized loger")
+
 	server, err = http.NewServer(log)
 	if err != nil {
 		log.Fatal("Failed to initialize server", zap.Error(err))
