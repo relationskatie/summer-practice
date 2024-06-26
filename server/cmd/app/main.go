@@ -31,7 +31,7 @@ func main() {
 	}
 	log.Info("initialized configuration", zap.Any("cnf", cfg))
 
-	server, err = http.NewServer(log)
+	server, err = http.NewServer(log, cfg.Controller)
 	if err != nil {
 		log.Fatal("Failed to initialize server", zap.Error(err))
 	}

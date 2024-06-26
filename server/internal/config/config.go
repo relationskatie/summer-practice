@@ -15,7 +15,10 @@ type Config struct {
 
 func New(ctx context.Context) (*Config, error) {
 	cfg := &Config{
-		Controller: new(Controller),
+		Controller: &Controller{
+			BindAddres: "0.0.0.0",
+			BindPort:   8000,
+		},
 	}
 	loader := confita.NewLoader(env.NewBackend(), flags.NewBackend())
 	if err := loader.Load(ctx, cfg); err != nil {
