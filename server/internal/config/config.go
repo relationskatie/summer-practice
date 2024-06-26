@@ -16,7 +16,7 @@ type Config struct {
 func New(ctx context.Context) (*Config, error) {
 	cfg := &Config{
 		Controller: &Controller{
-			BindAddres: "0.0.0.0",
+			BindAddres: "localhost",
 			BindPort:   8000,
 		},
 	}
