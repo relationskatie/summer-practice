@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/relationskatie/summer-practice/internal/config"
 	"github.com/relationskatie/summer-practice/internal/controller"
 	"github.com/relationskatie/summer-practice/internal/controller/http"
 	"go.uber.org/zap"
@@ -14,6 +15,7 @@ func main() {
 		err    error
 		ctx    context.Context
 		server controller.Controller
+		cnf    *config.Config
 	)
 
 	log, err = zap.NewProduction()
@@ -23,7 +25,7 @@ func main() {
 
 	log.Info("Initialized loger")
 
-	server, err = http.NewServer(log)
+	server, err = http.NewServer(log, cnf)
 	if err != nil {
 		log.Fatal("Failed to initialize server", zap.Error(err))
 	}
