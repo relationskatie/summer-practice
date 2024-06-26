@@ -35,15 +35,10 @@ func (ctrl *Controller) configureRoutes() {
 	log.Info("Configuration routes")
 	api := ctrl.server.Group("/app")
 	{
-		vacancy := api.Group("/vacans")
-		{
-			vacancy.POST("/", ctrl.HandleGetVacanciesByTunning)
-			vacancy.GET("/:id", ctrl.HandleGetVacancyById)
-			vacancy.POST("/:id", ctrl.HandleAddToFavourite)
-			vacancy.GET("/fav/", ctrl.HandleGetAllFavourite)
-			vacancy.DELETE("/fav/:id", ctrl.HandleDeleteIntoFavourite)
-
-		}
+		api.GET("/", ctrl.HandleGetHomePage)
+		api.GET("/form", ctrl.HandleGetForm)
+		api.GET("/vacancies", ctrl.HandleGetAllVacancies)
+		api.GET("/vacancies/:id", ctrl.HandleGetVacancyByID)
 	}
 }
 
