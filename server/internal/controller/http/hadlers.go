@@ -19,6 +19,8 @@ func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
 }
 
 func (ctrl *Controller) HandleGetForm(c echo.Context) error {
+	_ = "USUUB3AUI9SA6OVF2NJJ5AQVLHSMLLA05E5FI3TR96OG0BS7CIGEI5SFH2HA2JFH"
+	_ = "https://api.hh.ru/vacancies"
 	return nil
 }
 
