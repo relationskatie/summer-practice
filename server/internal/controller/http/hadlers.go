@@ -2,8 +2,10 @@ package http
 
 import (
 	"io"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/relationskatie/summer-practice/server/client"
 )
 
 func (ctrl *Controller) HandleGetHomePage(c echo.Context) error {
@@ -15,7 +17,8 @@ func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
 	if id == "123" {
 		io.WriteString(c.Response(), "yees")
 	}
-	return nil
+	model, _ := client.GetDataFromClient()
+	return c.JSON(http.StatusOK, model)
 }
 
 func (ctrl *Controller) HandleGetForm(c echo.Context) error {

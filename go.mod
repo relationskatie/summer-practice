@@ -3,6 +3,7 @@ module github.com/relationskatie/summer-practice
 go 1.20
 
 require (
+	github.com/go-resty/resty/v2 v2.13.1
 	github.com/google/uuid v1.6.0
 	github.com/heetch/confita v0.10.0
 	github.com/labstack/echo/v4 v4.12.0
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/go-resty/resty/v2 v2.13.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

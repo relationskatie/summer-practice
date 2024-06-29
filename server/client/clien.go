@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/go-resty/resty/v2"
+	"github.com/relationskatie/summer-practice/server/internal/model"
 	"go.uber.org/zap"
 )
 
@@ -17,4 +18,29 @@ func NewClient(log *zap.Logger) (*Client, error) {
 		log:    log,
 	}
 	return client, nil
+}
+
+func GetDataFromClient() ([]model.ClientDTO, error) {
+	var (
+		log    *zap.Logger
+		client *Client
+		err    error
+	)
+	log, err = zap.NewProduction()
+	defer log.Sync()
+	if err != nil {
+		log.Fatal("Failed to initilize logger", zap.Error(err))
+		return nil, err
+	}
+	client, err = NewClient(log)
+	if err != nil {
+		log.Fatal("Failed to initilize client", zap.Error(err))
+		return nil, err
+	}
+	vacancies, err := client.handleClientDo()
+	if err != nil {
+		log.Error("Error handling client request", zap.Error(err))
+		return nil, err
+	}
+	return vacancies, nil
 }
