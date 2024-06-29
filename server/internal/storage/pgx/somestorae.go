@@ -43,7 +43,7 @@ func (store *vacanciesStorage) migrate() error {
 func (store *vacanciesStorage) AppendAll(ctx context.Context, vacancies []model.ClientDTO) error {
 	batch := &pgx.Batch{}
 	for _, vacancy := range vacancies {
-		batch.Queue(queryAppend, vacancy.ID, vacancy.Area, vacancy.Employment)
+		batch.Queue(queryAppend, vacancy.ID, vacancy.Name, vacancy.Salary.From, vacancy.Area.Name, vacancy.URl, vacancy.Employment.Name, vacancy.Experience.Name)
 	}
 
 	br := store.pool.SendBatch(ctx, batch)

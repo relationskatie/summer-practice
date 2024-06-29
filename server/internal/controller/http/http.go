@@ -40,6 +40,7 @@ func (ctrl *Controller) configureRoutes() {
 	{
 		api.GET("/", ctrl.HandleGetHomePage)
 		api.GET("/form", ctrl.HandleGetForm)
+		api.POST("/form", ctrl.HandlePostForm)
 		api.GET("/vacancies", ctrl.HandleGetAllVacancies)
 		api.GET("/vacancies/:id", ctrl.HandleGetVacancyByID)
 	}

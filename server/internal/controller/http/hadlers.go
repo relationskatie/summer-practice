@@ -27,6 +27,10 @@ func (ctrl *Controller) HandleGetForm(c echo.Context) error {
 	return nil
 }
 
+func (ctrl *Controller) HandlePostForm(c echo.Context) error {
+	return nil
+}
+
 func (ctrl *Controller) HandleGetAllVacancies(c echo.Context) error {
 	return nil
 }
