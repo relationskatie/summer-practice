@@ -19,10 +19,10 @@ type Controller struct {
 	server *echo.Echo
 	log    *zap.Logger
 	cfg    *config.Controller
-	store  storage.VacanciesStorage
+	store  storage.Interface
 }
 
-func NewServer(store *storage.VacanciesStorage, log *zap.Logger, cfg *config.Controller) (*Controller, error) {
+func NewServer(store storage.Interface, log *zap.Logger, cfg *config.Controller) (*Controller, error) {
 	log.Info("Initialize controller")
 	ctrl := &Controller{
 		server: echo.New(),

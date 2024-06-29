@@ -18,3 +18,7 @@ type VacanciesStorage interface {
 	GetAll(ctx context.Context) ([]model.ClientDTO, error)
 	GetVacancyById(ctx context.Context, id uuid.UUID) (*model.ClientDTO, error)
 }
+
+type Interface interface {
+	Vacancies() VacanciesStorage
+}

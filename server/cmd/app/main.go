@@ -35,7 +35,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to create pgx storage", zap.Error(err))
 	}
-	server, err := http.NewServer(log, cfg.Controller)
+	server, err := http.NewServer(store, log, cfg.Controller)
 	if err != nil {
 		log.Fatal("Failed to initialize server", zap.Error(err))
 	}

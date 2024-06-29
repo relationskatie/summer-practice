@@ -61,7 +61,7 @@ func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, e
 
 	for row.Next() {
 		var temp model.ClientDTO
-		//err = rows.Scan(&temp.ID....)
+		err = rows.Scan(&temp.ID)
 		if err != nil {
 			return nil, fmt.Errorf("error while scan vacancies: %w", err)
 		}
@@ -73,9 +73,9 @@ func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, e
 	return res, nil
 }
 
-func (store *Storage) GetVacancyById(ctx context.Context, id uuid.UUID) (model.ClientDTO, error) {
+func (store *vacanciesStorage) GetVacancyById(ctx context.Context, id uuid.UUID) (*model.ClientDTO, error) {
 	var vacancy model.ClientDTO
-	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy...)
+	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.Area)
 	if err != nil {
 		return nil, err
 	}
