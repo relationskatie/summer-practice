@@ -32,7 +32,7 @@ func newVacanciesStorage(pool *pgxpool.Pool, log *zap.Logger, pgErr *pgconn.PgEr
 }
 
 func (store *vacanciesStorage) migrate() error {
-	_, err := store.pool.Exec(context.Background(), quertMigrate)
+	_, err := store.pool.Exec(context.Background(), queryMigrate)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, e
 
 func (store *vacanciesStorage) GetVacancyById(ctx context.Context, id uuid.UUID) (*model.ClientDTO, error) {
 	var vacancy model.ClientDTO
-	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.Area)
+	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.ID, &vacancy.Name, &vacancy.Salary, &vacancy.Area.Name)
 	if err != nil {
 		return nil, err
 	}
