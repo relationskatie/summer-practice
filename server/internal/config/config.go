@@ -10,7 +10,7 @@ import (
 
 type Config struct {
 	Controller *Controller
-	//Postgres   *PostgresConfig
+	Postgres   *PostgresConfig
 }
 
 func New(ctx context.Context) (*Config, error) {
@@ -18,6 +18,13 @@ func New(ctx context.Context) (*Config, error) {
 		Controller: &Controller{
 			BindAddres: "localhost",
 			BindPort:   8000,
+		},
+		Postgres: &PostgresConfig{
+			Host:     "localhost",
+			Port:     5432,
+			User:     "postgres",
+			Password: "postgres",
+			Database: "summer",
 		},
 	}
 	loader := confita.NewLoader(env.NewBackend(), flags.NewBackend())

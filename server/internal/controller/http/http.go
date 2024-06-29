@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/relationskatie/summer-practice/server/internal/config"
 	"github.com/relationskatie/summer-practice/server/internal/controller"
+	"github.com/relationskatie/summer-practice/server/internal/storage"
 	"go.uber.org/zap"
 )
 
@@ -18,14 +19,16 @@ type Controller struct {
 	server *echo.Echo
 	log    *zap.Logger
 	cfg    *config.Controller
+	store  storage.VacanciesStorage
 }
 
-func NewServer(log *zap.Logger, cfg *config.Controller) (*Controller, error) {
+func NewServer(store *storage.VacanciesStorage, log *zap.Logger, cfg *config.Controller) (*Controller, error) {
 	log.Info("Initialize controller")
 	ctrl := &Controller{
 		server: echo.New(),
 		log:    log,
 		cfg:    cfg,
+		store:  store,
 	}
 	ctrl.configure()
 	return ctrl, nil
