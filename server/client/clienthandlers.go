@@ -10,14 +10,13 @@ import (
 )
 
 func (client *Client) handleClientDo() ([]model.ClientDTO, error) {
-	//var req *model.ClientRequest
 	var Vacancies model.ClientResponse
 	tok := tokenapi.GetToken()
 	resp, err := client.client.R().SetHeader("Authorization", fmt.Sprintf("Bearer %s", tok)).
 		SetQueryParams(map[string]string{
-			"text":             "разработчик",
+			"text":             "golang",
 			"area":             "1",
-			"salary":           "1000000",
+			"salary":           "150000",
 			"only_with_salary": "true",
 			"per_page":         "20",
 		}).
