@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/relationskatie/summer-practice/server/internal/model"
@@ -39,13 +40,24 @@ func (store *vacanciesStorage) migrate() error {
 	return nil
 }
 
-func (store *vacanciesStorage) Append(ctx context.Context, vacancy *model.ClientDTO) error {
-	_, err := store.pool.Exec(ctx, queryAppend)
-	if err != nil {
-		if errors.As(err, &store.pgErr) && pgerrcode.UniqueViolation == store.pgErr.Code {
-			return err
+func (store *vacanciesStorage) AppendAll(ctx context.Context, vacancies []model.ClientDTO) error {
+	batch := &pgx.Batch{}
+	for _, vacancy := range vacancies {
+		batch.Queue(queryAppend, vacancy.ID, vacancy.Area, vacancy.Employment)
+	}
+
+	br := store.pool.SendBatch(ctx, batch)
+	defer br.Close()
+
+	for i := 0; i < len(vacancies); i++ {
+		_, err := br.Exec()
+		if err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) && pgerrcode.UniqueViolation == pgErr.Code {
+				return fmt.Errorf("unique violation error: %w", err)
+			}
+			return fmt.Errorf("error while inserting vacancies: %w", err)
 		}
-		return err
 	}
 	return nil
 }
@@ -61,13 +73,13 @@ func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, e
 
 	for row.Next() {
 		var temp model.ClientDTO
-		err = rows.Scan(&temp.ID)
+		err = row.Scan(&temp.ID)
 		if err != nil {
 			return nil, fmt.Errorf("error while scan vacancies: %w", err)
 		}
 		res = append(res, temp)
 	}
-	if err = rows.Err(); err != nil {
+	if err = row.Err(); err != nil {
 		return nil, fmt.Errorf("rows iteration error: w%", err)
 	}
 	return res, nil
@@ -82,6 +94,10 @@ func (store *vacanciesStorage) GetVacancyById(ctx context.Context, id uuid.UUID)
 	return &vacancy, nil
 }
 
-//func (store *Storage)DeleteAll(ctx context.Context)error{
-
-//}
+func (store *vacanciesStorage) DeleteAll(ctx context.Context) error {
+	_, err := store.pool.Exec(ctx, queryDeleteAll)
+	if err != nil {
+		return fmt.Errorf("error while deleting all vacancies: %w", err)
+	}
+	return nil
+}

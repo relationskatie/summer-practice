@@ -24,7 +24,7 @@ func New(ctx context.Context) (*Config, error) {
 			Port:     5432,
 			User:     "postgres",
 			Password: "postgres",
-			Database: "summer",
+			Database: "vacancies",
 		},
 	}
 	loader := confita.NewLoader(env.NewBackend(), flags.NewBackend())
