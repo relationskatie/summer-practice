@@ -43,7 +43,8 @@ func (store *vacanciesStorage) migrate() error {
 func (store *vacanciesStorage) AppendAll(ctx context.Context, vacancies []model.ClientDTO) error {
 	batch := &pgx.Batch{}
 	for _, vacancy := range vacancies {
-		batch.Queue(queryAppend, vacancy.ID, vacancy.Name, vacancy.Salary.From, vacancy.Area.Name, vacancy.URl, vacancy.Employment.Name, vacancy.Experience.Name)
+		id := uuid.New()
+		batch.Queue(queryAppend, id, vacancy.Name, vacancy.Salary.From, vacancy.Area.Name, vacancy.URl)
 	}
 
 	br := store.pool.SendBatch(ctx, batch)
@@ -65,31 +66,34 @@ func (store *vacanciesStorage) AppendAll(ctx context.Context, vacancies []model.
 func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, error) {
 	var res []model.ClientDTO
 
-	row, err := store.pool.Query(ctx, queryGetAll)
+	rows, err := store.pool.Query(ctx, queryGetAll)
 	if err != nil {
-		return nil, fmt.Errorf("error while gel all vacancies: %W", err)
+		return nil, fmt.Errorf("error while getting all vacancies: %w", err)
 	}
-	defer row.Close()
+	defer rows.Close()
 
-	for row.Next() {
+	for rows.Next() {
 		var temp model.ClientDTO
-		err = row.Scan(&temp.ID)
+		err = rows.Scan(&temp.ID, &temp.Name, &temp.Salary.From, &temp.Area.Name, &temp.URl)
 		if err != nil {
-			return nil, fmt.Errorf("error while scan vacancies: %w", err)
+			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
 		res = append(res, temp)
 	}
-	if err = row.Err(); err != nil {
-		return nil, fmt.Errorf("rows iteration error: w%", err)
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows iteration error: %w", err)
 	}
+
 	return res, nil
 }
 
 func (store *vacanciesStorage) GetVacancyById(ctx context.Context, id uuid.UUID) (*model.ClientDTO, error) {
 	var vacancy model.ClientDTO
-	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.ID, &vacancy.Name, &vacancy.Salary, &vacancy.Area.Name)
+	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.ID, &vacancy.Name, &vacancy.Salary.From, &vacancy.Area.Name, &vacancy.URl)
 	if err != nil {
-		return nil, err
+
+		return nil, fmt.Errorf("error scanning vacancy: %w", err)
 	}
 	return &vacancy, nil
 }

@@ -20,7 +20,7 @@ func NewClient(log *zap.Logger) (*Client, error) {
 	return client, nil
 }
 
-func GetDataFromClient(text string, salary string, area string, employment string, experience string) ([]model.ClientDTO, error) {
+func GetDataFromClient(text string, salary string, area string) ([]model.ClientDTO, error) {
 	var (
 		log    *zap.Logger
 		client *Client
@@ -37,7 +37,7 @@ func GetDataFromClient(text string, salary string, area string, employment strin
 		log.Fatal("Failed to initilize client", zap.Error(err))
 		return nil, err
 	}
-	vacancies, err := client.handleClientDo(text, salary, area, employment, experience)
+	vacancies, err := client.handleClientDo(text, salary, area)
 	if err != nil {
 		log.Error("Error handling client request", zap.Error(err))
 		return nil, err

@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/relationskatie/summer-practice/server/client"
 	"github.com/relationskatie/summer-practice/server/internal/model"
+	"go.uber.org/zap"
 )
 
 func (ctrl *Controller) HandleGetHomePage(c echo.Context) error {
@@ -19,6 +20,7 @@ func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	ctrl.log.Info("parce vacancy")
 	vacancy, err := ctrl.store.Vacancies().GetVacancyById(c.Request().Context(), vacancyID)
 	if err != nil {
 		return c.JSON(http.StatusNotFound, err)
@@ -39,11 +41,9 @@ func (ctrl *Controller) HandlePostForm(c echo.Context) error {
 			http.StatusBadRequest, err)
 	}
 	params := model.FormResponse{
-		Text:       request.Text,
-		Salary:     request.Salary,
-		Area:       request.Area,
-		Employment: request.Employment,
-		Experience: request.Experience,
+		Text:   request.Text,
+		Salary: request.Salary,
+		Area:   request.Area,
 	}
 	ctrl.mutex.Lock()
 	ctrl.data = append(ctrl.data, params)
@@ -56,10 +56,36 @@ func (ctrl *Controller) HandleGetAllVacancies(c echo.Context) error {
 	data := ctrl.data
 	ctrl.data = []model.FormResponse{}
 	ctrl.mutex.Unlock()
+
+	if len(data) == 0 {
+		return c.JSON(http.StatusNotFound, "no data available")
+	}
+
 	modelType := data[0]
-	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, modelType.Area, modelType.Employment, modelType.Experience)
+	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, modelType.Area)
 	if err != nil {
+		ctrl.log.Error("Error getting data from client", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, err)
 	}
-	return c.JSON(http.StatusOK, mode)
+
+	err = ctrl.store.Vacancies().DeleteAll(c.Request().Context())
+	if err != nil {
+		ctrl.log.Info("No vacancies found in DB to delete", zap.Error(err))
+	}
+	ctrl.log.Info("Delete all old vacancies")
+	err = ctrl.store.Vacancies().AppendAll(c.Request().Context(), mode)
+	if err != nil {
+		ctrl.log.Error("Error appending all vacancies", zap.Error(err))
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	ctrl.log.Info("Add Vacancies in db")
+
+	vacancies, err := ctrl.store.Vacancies().GetAll(c.Request().Context())
+	if err != nil {
+		ctrl.log.Error("Error getting all vacancies", zap.Error(err))
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	ctrl.log.Info("Get all vacancies")
+
+	return c.JSON(http.StatusOK, vacancies)
 }

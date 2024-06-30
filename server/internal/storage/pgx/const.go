@@ -3,7 +3,7 @@ package pgx
 const (
 	queryMigrate = `CREATE TABLE IF NOT EXISTS vacancies
 	(
-		"id" UUID NOT NULL UNIQUE,
+		"id" VARCHAR NOT NULL UNIQUE,
 		"name" VARCHAR NOT NULL,
 		"salary" VARCHAR NOT NULL,
 		"area" VARCHAR NOT NULL,
@@ -15,5 +15,5 @@ const (
 	queryGetByID   = `SELECT * FROM vacancies where id = $1`
 	queryGetAll    = `SELECT * FROM vacancies`
 	queryDeleteAll = `DELETE FROM vacancies`
-	queryAppend    = `INSERT INTO vacancies (id, name, salary, area, url, employment, experience) VALUES ($1, $2, $3, $4, $5, $6, $7)`
+	queryAppend    = `INSERT INTO vacancies (id, name, salary, area, url) VALUES ($1, $2, $3, $4, $5)`
 )
