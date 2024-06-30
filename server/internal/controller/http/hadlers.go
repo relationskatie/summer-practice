@@ -39,11 +39,9 @@ func (ctrl *Controller) HandlePostForm(c echo.Context) error {
 			http.StatusBadRequest, err)
 	}
 	params := &model.FormResponse{
-		ID:         uuid.New(),
 		Text:       request.Text,
 		Salary:     request.Salary,
 		Area:       request.Area,
-		URL:        request.URL,
 		Employment: request.Employment,
 		Experience: request.Experience,
 	}
