@@ -1,9 +1,9 @@
 package model
 
 type FormRequest struct {
-	Text       string `json"text"`
+	Text       string `json:"text"`
 	Salary     string `json:"salary"`
-	Area       string `json:"area`
+	Area       string `json:"area"`
 	Employment string `json:"employment"`
 	Experience string `json:"experience"`
 }

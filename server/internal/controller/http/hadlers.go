@@ -38,18 +38,28 @@ func (ctrl *Controller) HandlePostForm(c echo.Context) error {
 		return c.JSON(
 			http.StatusBadRequest, err)
 	}
-	params := &model.FormResponse{
+	params := model.FormResponse{
 		Text:       request.Text,
 		Salary:     request.Salary,
 		Area:       request.Area,
 		Employment: request.Employment,
 		Experience: request.Experience,
 	}
+	ctrl.mutex.Lock()
+	ctrl.data = append(ctrl.data, params)
+	ctrl.mutex.Unlock()
 	return c.JSON(http.StatusCreated, params)
-
 }
 
 func (ctrl *Controller) HandleGetAllVacancies(c echo.Context) error {
-	model, _ := client.GetDataFromClient()
-	return c.JSON(http.StatusOK, model)
+	ctrl.mutex.Lock()
+	data := ctrl.data
+	ctrl.data = []model.FormResponse{}
+	ctrl.mutex.Unlock()
+	modelType := data[0]
+	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, modelType.Area, modelType.Employment, modelType.Experience)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, mode)
 }

@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"sync"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -9,6 +10,7 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/relationskatie/summer-practice/server/internal/config"
 	"github.com/relationskatie/summer-practice/server/internal/controller"
+	"github.com/relationskatie/summer-practice/server/internal/model"
 	"github.com/relationskatie/summer-practice/server/internal/storage"
 	"go.uber.org/zap"
 )
@@ -20,6 +22,8 @@ type Controller struct {
 	log    *zap.Logger
 	cfg    *config.Controller
 	store  storage.Interface
+	data   []model.FormResponse
+	mutex  sync.Mutex
 }
 
 func NewServer(store storage.Interface, log *zap.Logger, cfg *config.Controller) (*Controller, error) {
@@ -29,6 +33,8 @@ func NewServer(store storage.Interface, log *zap.Logger, cfg *config.Controller)
 		log:    log,
 		cfg:    cfg,
 		store:  store,
+		data:   []model.FormResponse{},
+		mutex:  sync.Mutex{},
 	}
 	ctrl.configure()
 	return ctrl, nil
