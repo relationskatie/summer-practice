@@ -1,0 +1,20 @@
+FROM golang:1.17-alpine
+
+WORKDIR /go/src/app
+
+
+COPY go.mod go.sum ./
+
+
+RUN go mod download
+
+
+COPY server/. .
+
+# Собираем приложение
+RUN go build -o main ./cmd/app
+
+EXPOSE 8000
+
+CMD ["./main"]
+
