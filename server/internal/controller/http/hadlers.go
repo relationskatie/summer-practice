@@ -11,7 +11,8 @@ import (
 )
 
 func (ctrl *Controller) HandleGetHomePage(c echo.Context) error {
-	return nil
+	c.Request().Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	return c.JSON(http.StatusOK, nil)
 }
 
 func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
@@ -29,6 +30,7 @@ func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
 }
 
 func (ctrl *Controller) HandleGetForm(c echo.Context) error {
+	c.Request().Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	return nil
 }
 

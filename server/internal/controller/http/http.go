@@ -61,7 +61,17 @@ func (ctrl *Controller) configureMiddlewares() {
 			Generator:    uuid.NewString,
 			TargetHeader: echo.HeaderXRequestID,
 		}),
-		middleware.Logger(),
+		middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"*"},
+			AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+			AllowMethods: []string{echo.GET, echo.POST},
+		}),
+		/*middleware.StaticWithConfig(middleware.StaticConfig{
+			Root:  "/home/relationskatie/practice/client/index.htm",
+			Index: "index.html",
+			HTML5: true,
+		}),
+		middleware.Logger(),*/
 	}
 	ctrl.server.Use(middlewares...)
 }
