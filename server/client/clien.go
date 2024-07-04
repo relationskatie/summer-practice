@@ -44,3 +44,28 @@ func GetDataFromClient(text string, salary string, area string) ([]model.ClientD
 	}
 	return vacancies, nil
 }
+
+func GetAreaID(cityName string) (string, error) {
+	var (
+		log    *zap.Logger
+		client *Client
+		err    error
+	)
+	log, err = zap.NewProduction()
+	defer log.Sync()
+	if err != nil {
+		log.Fatal("Failed to initilize logger", zap.Error(err))
+		return "", err
+	}
+	client, err = NewClient(log)
+	if err != nil {
+		log.Fatal("Failed to initilize client", zap.Error(err))
+		return "", err
+	}
+	id, err := client.handleGetIDArea(cityName)
+	if err != nil {
+		log.Error("Error handling client request", zap.Error(err))
+		return "", nil
+	}
+	return id, nil
+}

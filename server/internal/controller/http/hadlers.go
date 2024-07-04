@@ -21,7 +21,7 @@ func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	ctrl.log.Info("parce vacancy")
+	ctrl.log.Info("parce id vacancy")
 	vacancy, err := ctrl.store.Vacancies().GetVacancyById(c.Request().Context(), vacancyID)
 	if err != nil {
 		return c.JSON(http.StatusNotFound, err)
@@ -64,7 +64,11 @@ func (ctrl *Controller) HandleGetAllVacancies(c echo.Context) error {
 	}
 
 	modelType := data[0]
-	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, modelType.Area)
+	id, err := client.GetAreaID(modelType.Area)
+	if err != nil {
+		ctrl.log.Error("Error getting area id", zap.Error(err))
+	}
+	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, id)
 	if err != nil {
 		ctrl.log.Error("Error getting data from client", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, err)

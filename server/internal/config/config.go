@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"log"
 
 	"github.com/heetch/confita"
 	"github.com/heetch/confita/backend/env"
@@ -29,6 +30,7 @@ func New(ctx context.Context) (*Config, error) {
 	}
 	loader := confita.NewLoader(env.NewBackend(), flags.NewBackend())
 	if err := loader.Load(ctx, cfg); err != nil {
+		log.Fatal("Failed to loader load")
 		return nil, err
 	}
 	return cfg, nil

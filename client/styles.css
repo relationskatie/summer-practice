@@ -43,7 +43,7 @@ form {
 
 input, textarea {
     margin-bottom: 10px;
-    padding: 8px;
+    padding: 12px;
     width: 100%;
     max-width: 150px;
     font-size: 10px;
@@ -52,9 +52,9 @@ input, textarea {
 }
 
 .vacancy-list {
-    padding: 100px;
+    padding: 18px;
     text-align: left;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 .vacancy-item {
