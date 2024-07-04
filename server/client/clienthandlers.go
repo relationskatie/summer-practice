@@ -33,8 +33,6 @@ func (client *Client) handleClientDo(text string, salary string, area string) ([
 		client.log.Error("Failed to request hh.ru", zap.Error(err))
 		return nil, err
 	}
-	///defer resp.RawResponse.Body.Close()
-
 	err = json.Unmarshal(resp.Body(), &Vacancies)
 	if err != nil {
 		client.log.Error("Failed to unmarshall result", zap.Error(err))
@@ -53,7 +51,6 @@ func (client *Client) handleGetIDArea(cityName string) (string, error) {
 		client.log.Error("Failed to making request on area id", zap.Error(err))
 		return "", nil
 	}
-	///defer resp.RawResponse.Body.Close()
 
 	var areas []Area
 	err = json.Unmarshal(resp.Body(), &areas)
