@@ -12,7 +12,6 @@ const (
 		"experience" VARCHAR NOT NULL,
 		PRIMARY KEY("id")
 	);`
-	queryGetByID   = `SELECT * FROM vacancies where id = $1`
 	queryGetAll    = `SELECT * FROM vacancies`
 	queryDeleteAll = `DELETE FROM vacancies`
 	queryAppend    = `INSERT INTO vacancies (id, name, salary, area, url) VALUES ($1, $2, $3, $4, $5)`

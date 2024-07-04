@@ -16,7 +16,7 @@ type Area struct {
 	Areas []Area `json:"areas"`
 }
 
-func (client *Client) handleClientDo(text string, salary string, area string) ([]model.ClientDTO, error) {
+func (client *Client) handleClientDo(text string, salary string, area string, experience string) ([]model.ClientDTO, error) {
 	var Vacancies model.ClientResponse
 	url := "https://api.hh.ru/vacancies"
 	tok := tokenapi.GetToken()
@@ -25,8 +25,9 @@ func (client *Client) handleClientDo(text string, salary string, area string) ([
 			"text":             text,
 			"salary":           salary,
 			"area":             area,
+			"experience":       experience,
 			"only_with_salary": "true",
-			"per_page":         "10",
+			"per_page":         "30",
 		}).
 		Get(url)
 	if err != nil {

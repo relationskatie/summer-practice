@@ -88,16 +88,6 @@ func (store *vacanciesStorage) GetAll(ctx context.Context) ([]model.ClientDTO, e
 	return res, nil
 }
 
-func (store *vacanciesStorage) GetVacancyById(ctx context.Context, id uuid.UUID) (*model.ClientDTO, error) {
-	var vacancy model.ClientDTO
-	err := store.pool.QueryRow(ctx, queryGetByID, id).Scan(&vacancy.ID, &vacancy.Name, &vacancy.Salary.From, &vacancy.Area.Name, &vacancy.URl)
-	if err != nil {
-
-		return nil, fmt.Errorf("error scanning vacancy: %w", err)
-	}
-	return &vacancy, nil
-}
-
 func (store *vacanciesStorage) DeleteAll(ctx context.Context) error {
 	_, err := store.pool.Exec(ctx, queryDeleteAll)
 	if err != nil {

@@ -9,7 +9,7 @@ type ClientDTO struct {
 	Area struct {
 		Name string `json:"name"`
 	} `json:"area"`
-	URl string `json:"url"`
+	URl string `json:"alternate_url"`
 }
 
 type ClientResponse struct {

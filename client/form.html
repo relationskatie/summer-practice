@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Заполните анкету для поиска вакансий</h1>
+        <h1 style="font-family: Arial, sans-serif">Заполните анкету для поиска вакансий</h1>
+
         <form id="submitForm">
             <label for="text">Должность:</label>
             <textarea id="text" name="text" required></textarea>
@@ -16,113 +17,44 @@
             <input type="text" id="salary" name="salary" required>
             <label for="area">Область:</label>
             <input type="text" id="area" name="area" required>
+
+    
+            <div class="experience-options">
+                <label>
+                    <input type="radio" name="experience" value="noExperience" required>
+                    Нет опыта
+                </label>
+                <label>
+                    <input type="radio" name="experience" value="between1And3" required>
+                    От 1 года до 3 лет
+                </label>
+                <label>
+                    <input type="radio" name="experience" value="between3And6" required>
+                    От 3 до 6 лет
+                </label>
+                <label>
+                    <input type="radio" name="experience" value="moreThan6" required>
+                    Более 6 лет
+                </label>
+            </div>
+            
             <button type="submit">Отправить</button>
         </form>
-        <div class="vacancy-list" id="vacancyList"></div>
+        <div class="vacancy-list">
+            <table id="vacancyTable">
+                <thead>
+                    <tr>
+                        <th>Должность</th>
+                        <th>Зарплата</th>
+                        <th>Область</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody id="vacancyTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

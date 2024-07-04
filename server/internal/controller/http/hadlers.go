@@ -3,36 +3,11 @@ package http
 import (
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/relationskatie/summer-practice/server/client"
 	"github.com/relationskatie/summer-practice/server/internal/model"
 	"go.uber.org/zap"
 )
-
-func (ctrl *Controller) HandleGetHomePage(c echo.Context) error {
-	c.Request().Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	return c.JSON(http.StatusOK, nil)
-}
-
-func (ctrl *Controller) HandleGetVacancyByID(c echo.Context) error {
-	id := c.Param("id")
-	vacancyID, err := uuid.Parse(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
-	}
-	ctrl.log.Info("parce id vacancy")
-	vacancy, err := ctrl.store.Vacancies().GetVacancyById(c.Request().Context(), vacancyID)
-	if err != nil {
-		return c.JSON(http.StatusNotFound, err)
-	}
-	return c.JSON(http.StatusOK, vacancy)
-}
-
-func (ctrl *Controller) HandleGetForm(c echo.Context) error {
-	c.Request().Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	return nil
-}
 
 func (ctrl *Controller) HandlePostForm(c echo.Context) error {
 	var (
@@ -42,10 +17,23 @@ func (ctrl *Controller) HandlePostForm(c echo.Context) error {
 		return c.JSON(
 			http.StatusBadRequest, err)
 	}
+	experience := ""
+	switch request.Experience {
+	case "Нет опыта":
+		experience = "noExperience"
+	case "От 1 года до 3 лет":
+		experience = "between1And3"
+	case "От 3 до 6 лет":
+		experience = "between3And6"
+	case "Более 6 лет":
+		experience = "moreThan6"
+	}
+
 	params := model.FormResponse{
-		Text:   request.Text,
-		Salary: request.Salary,
-		Area:   request.Area,
+		Text:       request.Text,
+		Salary:     request.Salary,
+		Area:       request.Area,
+		Experience: experience,
 	}
 	ctrl.mutex.Lock()
 	ctrl.data = append(ctrl.data, params)
@@ -68,7 +56,7 @@ func (ctrl *Controller) HandleGetAllVacancies(c echo.Context) error {
 	if err != nil {
 		ctrl.log.Error("Error getting area id", zap.Error(err))
 	}
-	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, id)
+	mode, err := client.GetDataFromClient(modelType.Text, modelType.Salary, id, modelType.Experience)
 	if err != nil {
 		ctrl.log.Error("Error getting data from client", zap.Error(err))
 		return c.JSON(http.StatusInternalServerError, err)

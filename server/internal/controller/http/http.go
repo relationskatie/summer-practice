@@ -44,11 +44,8 @@ func (ctrl *Controller) configureRoutes() {
 	log.Info("Configuration routes")
 	api := ctrl.server.Group("/app")
 	{
-		api.GET("/", ctrl.HandleGetHomePage)
-		api.GET("/form", ctrl.HandleGetForm)
 		api.POST("/form", ctrl.HandlePostForm)
 		api.GET("/vacancies", ctrl.HandleGetAllVacancies)
-		api.GET("/vacancies/:id", ctrl.HandleGetVacancyByID)
 	}
 }
 
@@ -66,12 +63,6 @@ func (ctrl *Controller) configureMiddlewares() {
 			AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 			AllowMethods: []string{echo.GET, echo.POST},
 		}),
-		/*middleware.StaticWithConfig(middleware.StaticConfig{
-			Root:  "/home/relationskatie/practice/client/index.htm",
-			Index: "index.html",
-			HTML5: true,
-		}),
-		middleware.Logger(),*/
 	}
 	ctrl.server.Use(middlewares...)
 }
