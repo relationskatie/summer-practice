@@ -26,7 +26,7 @@ func (client *Client) handleClientDo(text string, salary string, area string) ([
 			"salary":           salary,
 			"area":             area,
 			"only_with_salary": "true",
-			"per_page":         "30",
+			"per_page":         "10",
 		}).
 		Get(url)
 	if err != nil {
