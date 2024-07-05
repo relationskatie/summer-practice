@@ -13,5 +13,6 @@ COPY server/ ./server/
 # Собираем приложение
 RUN go build -o app ./server/cmd/app
 
+EXPOSE 8000
 # Команда для запуска приложения при старте контейнера
 CMD ["./app"]
